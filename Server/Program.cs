@@ -16,6 +16,8 @@ namespace Server
         {
             Console.WriteLine("ProjectTCG-Server Program\n\n============\n\n");
 
+            Shared.Logger.OnAddLogData += Console.WriteLine;
+
             //DNS (Domain Name System)
             string host = Dns.GetHostName();
             IPHostEntry ipHost = Dns.GetHostEntry(host);
@@ -24,7 +26,6 @@ namespace Server
 
 
             _listener.Init(endPoint, () => { return new ClientSession(); });
-
             while (true)
             {
             }
