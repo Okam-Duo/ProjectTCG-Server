@@ -14,6 +14,11 @@ namespace Server
 
         static void Main(string[] args)
         {
+            StartServer();
+        }
+
+        static void StartServer()
+        {
             Console.WriteLine("ProjectTCG-Server Program\n\n============\n\n");
 
             Shared.Logger.OnAddLogData += Console.WriteLine;
