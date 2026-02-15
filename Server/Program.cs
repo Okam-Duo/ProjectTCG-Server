@@ -8,9 +8,10 @@ using System.Threading.Tasks;
 
 namespace Server
 {
+
     class Program
     {
-        static Listener _listener = new();
+        static AccountServer server;
 
         static void Main(string[] args)
         {
@@ -23,14 +24,8 @@ namespace Server
 
             Shared.Logger.OnAddLogData += Console.WriteLine;
 
-            //DNS (Domain Name System)
-            string host = Dns.GetHostName();
-            IPHostEntry ipHost = Dns.GetHostEntry(host);
-            IPAddress ipAddr = ipHost.AddressList[0];
-            IPEndPoint endPoint = new IPEndPoint(ipAddr, 7777);
+            server = new AccountServer();
 
-
-            _listener.Init(endPoint, () => { return new ClientSession(); });
             while (true)
             {
             }

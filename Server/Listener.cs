@@ -9,19 +9,28 @@ using System.Threading.Tasks;
 
 namespace Server
 {
-    public class Listener
+    public class Listener<SessionT> where SessionT : Session
     {
-        Socket _listenSocket;
-        Func<Session> _sessionFactory;
+        private Socket _listenSocket;
+        private Func<SessionT> _sessionFactory;
+        private Action<SessionT> _onAcceptAsync;
 
-        public void Init(IPEndPoint endPoint, Func<Session> sessionFactory)
+        private bool _isListening = false;
+
+        public Listener(IPEndPoint endPoint, Func<SessionT> sessionFactory, Action<SessionT> onAcceptAsync)
         {
             //문지기 생성
             _listenSocket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-            _sessionFactory += sessionFactory;
+            _sessionFactory = sessionFactory;
+            _onAcceptAsync = onAcceptAsync;
 
             //문지기 교육
             _listenSocket.Bind(endPoint);
+        }
+
+        public void StartListen()
+        {
+            if(_isListening) return;
 
             //영업 시작
             //backlog 매개변수 : 최대 대기 수
@@ -30,6 +39,8 @@ namespace Server
             SocketAsyncEventArgs args = new SocketAsyncEventArgs();   //한번 만들면 계속 재활용 가능
             args.Completed += new EventHandler<SocketAsyncEventArgs>(OnAcceptCompleted);
             RegisterAccept(args);
+
+            _isListening = true;
         }
 
         //요청
@@ -49,9 +60,11 @@ namespace Server
             if (args.SocketError == SocketError.Success)
             {
                 //받는다
-                Session session = _sessionFactory.Invoke();
+                SessionT session = _sessionFactory.Invoke();
                 session.Start(args.AcceptSocket);
                 session.OnConnected(args.AcceptSocket.RemoteEndPoint);
+
+                _onAcceptAsync?.Invoke(session);
             }
             else
             {

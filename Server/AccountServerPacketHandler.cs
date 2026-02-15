@@ -6,11 +6,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Shared.Contents
+namespace Server
 {
-    public class PacketHandler : IPacketHandler
+    public class AccountServerPacketHandler : IPacketHandler
     {
-        public static PacketHandler Instance = new();
+        private AccountServer _server;
+
+        public AccountServerPacketHandler(AccountServer server)
+        {
+            _server = server;
+        }
+
+        private void OnRecieveServerToClientPacket(Session session, IPacket packet)
+        {
+            Console.WriteLine($"Server->Client 패킷이 수신되었습니다, 패킷 타입 : {packet.GetType().Name}");
+        }
+
+        #region 패킷 핸들
 
         public void C_BuyShopItemReq_Handle(Session session, C_BuyShopItemReq packet)
         {
@@ -24,7 +36,7 @@ namespace Shared.Contents
 
         public void C_ConnectServerReq_Handle(Session session, C_ConnectServerReq packet)
         {
-            throw new NotImplementedException();
+            Console.WriteLine("테스트 성공");
         }
 
         public void C_CurrencyInfoReq_Handle(Session session, C_CurrencyInfoReq packet)
@@ -84,82 +96,84 @@ namespace Shared.Contents
 
         public void S_BuyShopItemRes_Handle(Session session, S_BuyShopItemRes packet)
         {
-            throw new NotImplementedException();
+            OnRecieveServerToClientPacket(session, packet);
         }
 
         public void S_CheckIdAvailableRes_Handle(Session session, S_CheckIdAvailableRes packet)
         {
-            throw new NotImplementedException();
+            OnRecieveServerToClientPacket(session, packet);
         }
 
         public void S_ConnectServerRes_Handle(Session session, S_ConnectServerRes packet)
         {
-            throw new NotImplementedException();
+            OnRecieveServerToClientPacket(session, packet);
         }
 
         public void S_CurrencyInfoRes_Handle(Session session, S_CurrencyInfoRes packet)
         {
-            throw new NotImplementedException();
+            OnRecieveServerToClientPacket(session, packet);
         }
 
         public void S_DeckEditRes_Handle(Session session, S_DeckEditRes packet)
         {
-            throw new NotImplementedException();
+            OnRecieveServerToClientPacket(session, packet);
         }
 
         public void S_DeckInfoRes_Handle(Session session, S_DeckInfoRes packet)
         {
-            throw new NotImplementedException();
+            OnRecieveServerToClientPacket(session, packet);
         }
 
         public void S_GameResult_Handle(Session session, S_GameResult packet)
         {
-            throw new NotImplementedException();
+            OnRecieveServerToClientPacket(session, packet);
         }
 
         public void S_GameRoomStart_Handle(Session session, S_GameRoomStart packet)
         {
-            throw new NotImplementedException();
+            OnRecieveServerToClientPacket(session, packet);
         }
 
         public void S_IngameActionChain_Handle(Session session, S_IngameActionChain packet)
         {
-            throw new NotImplementedException();
+            OnRecieveServerToClientPacket(session, packet);
         }
 
         public void S_LoginRes_Handle(Session session, S_LoginRes packet)
         {
-            throw new NotImplementedException();
+            OnRecieveServerToClientPacket(session, packet);
         }
 
         public void S_MatchingSuccess_Handle(Session session, S_MatchingSuccess packet)
         {
-            throw new NotImplementedException();
+            OnRecieveServerToClientPacket(session, packet);
         }
 
         public void S_ShopInfoRes_Handle(Session session, S_ShopInfoRes packet)
         {
-            throw new NotImplementedException();
+            OnRecieveServerToClientPacket(session, packet);
         }
 
         public void S_SignInRes_Handle(Session session, S_SignInRes packet)
         {
-            throw new NotImplementedException();
+            OnRecieveServerToClientPacket(session, packet);
         }
 
         public void S_TryMatchingRes_Handle(Session session, S_TryMatchingRes packet)
         {
-            throw new NotImplementedException();
+            OnRecieveServerToClientPacket(session, packet);
         }
 
         public void S_TurnEnd_Handle(Session session, S_TurnEnd packet)
         {
-            throw new NotImplementedException();
+            OnRecieveServerToClientPacket(session, packet);
         }
 
         public void S_UseCardRes_Handle(Session session, S_UseCardRes packet)
         {
-            throw new NotImplementedException();
+            OnRecieveServerToClientPacket(session, packet);
         }
+
+        #endregion
     }
 }

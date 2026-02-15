@@ -9,6 +9,18 @@ namespace Server
 {
     class ClientSession : PacketSession
     {
+        private IPacketHandler _packetHandlerAsync;
+        
+        public ClientSession(IPacketHandler packetHandlerAsync)
+        {
+            _packetHandlerAsync = packetHandlerAsync;
+        }
+
+        public void ChangePacketHandler(IPacketHandler packetHandler)
+        {
+            _packetHandlerAsync = packetHandler;
+        }
+
         public override void OnConnected(EndPoint endPoint)
         {
             Console.WriteLine($"OnConnected : {endPoint}");
@@ -34,7 +46,7 @@ namespace Server
 
             Console.WriteLine($"[From Client] packetId : {packetId}");
 
-            ((IPacketHandler)PacketHandler.Instance).RunPakcetHandle(this, packetId, packet);
+            _packetHandlerAsync.RunPakcetHandle(this, packetId, packet);
         }
 
         public override void OnSend(int numOfByte)
