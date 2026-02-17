@@ -24,28 +24,39 @@ namespace Server
         }
 
 
-        public async Task RunSql(string sql, Action<SqlDataReader> callBack = null, Dictionary<string, object> sqlParameters = null)
+        public async Task<(bool,Exception?)> RunSql(string sql, Action<SqlDataReader> callBack = null, Dictionary<string, string> sqlParameters = null)
         {
-            using (SqlConnection _connection = new SqlConnection(DefaultConnectionString))
+            try
             {
-                await _connection.OpenAsync();
-
-                using (SqlCommand command = new SqlCommand(sql, _connection))
+                using (SqlConnection _connection = new SqlConnection(DefaultConnectionString))
                 {
-                    if (sqlParameters != null)
+                    await _connection.OpenAsync();
+
+                    using (SqlCommand command = new SqlCommand(sql, _connection))
                     {
-                        foreach (var param in sqlParameters)
+                        if (sqlParameters != null)
                         {
-                            command.Parameters.AddWithValue(param.Key, param.Value);
+                            foreach (var param in sqlParameters)
+                            {
+                                command.Parameters.AddWithValue(param.Key, param.Value);
+                            }
+                        }
+
+                        using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                        {
+                            callBack?.Invoke(reader);
                         }
                     }
-
-                    using (SqlDataReader reader = await command.ExecuteReaderAsync())
-                    {
-                        callBack?.Invoke(reader);
-                    }
                 }
-            }   
+
+                return (true, null);
+            }
+            catch (Exception ex)
+            {
+                //Console.WriteLine($"{nameof(DBConnection)}.{nameof(RunSql)} exception : {ex}");
+
+                return (false, ex);
+            }
         }
     }
 }
