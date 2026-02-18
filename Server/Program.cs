@@ -5,13 +5,15 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Server.GameServer;
 
 namespace Server
 {
 
     class Program
     {
-        static AccountServer server;
+        private static AccountServer accountServer;
+        private static GameServer.GameServer gameServer;
 
         static void Main(string[] args)
         {
@@ -24,7 +26,8 @@ namespace Server
 
             Shared.Logger.OnAddLogData += Console.WriteLine;
 
-            server = new AccountServer();
+            gameServer = new GameServer.GameServer();
+            accountServer = new AccountServer((accountInfo, session) => { gameServer.TryAddUserSession(accountInfo, session); });
 
             while (true)
             {

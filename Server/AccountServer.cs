@@ -1,5 +1,7 @@
 ﻿using Server.GameServer;
 using Shared.Contents;
+using Shared.Network;
+using Shared.Packets;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,15 +17,19 @@ namespace Server
         private Listener<ClientSession> _listener;
         private AccountServerPacketHandler _packetHandler;
         private DBConnection _db;
+        private Action<AccountInfo, ClientSession> _onUserLogin;
 
-        public AccountServer()
+        public AccountServer(Action<AccountInfo, ClientSession> onUserLogin)
         {
+            _onUserLogin = onUserLogin;
+
             //DNS (Domain Name System)
             string host = Dns.GetHostName();
             Console.WriteLine(host);
             IPHostEntry ipHost = Dns.GetHostEntry(host);
             IPAddress ipAddr = ipHost.AddressList[0];
-            if (ipAddr == null) {
+            if (ipAddr == null)
+            {
                 Console.WriteLine($"{nameof(AccountServer)} : ip를 찾을 수 없음");
                 throw new Exception("ip를 찾을 수 없음");
             }
@@ -114,6 +120,21 @@ COMMIT;",
                 );
 
             return new AccountInfo(userId, nickName);
+        }
+
+        public async Task<bool> TryLogin(string loginId, string loginPasswordHash, ClientSession session)
+        {
+            AccountInfo accountInfo = await TryGetAccountInfo(loginId, loginPasswordHash);
+            if (accountInfo.userId != -1)
+            {
+                _onUserLogin?.Invoke(accountInfo, session);
+                return true;
+            }
+            else
+            {
+                session.Send(new S_LoginRes(false, "invalidNickName", -1).Write());
+                return false;
+            }
         }
 
         private async void OnAcceptAsync(ClientSession session)

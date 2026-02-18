@@ -57,16 +57,11 @@ namespace Server
             throw new NotImplementedException();
         }
 
-        public async void C_LoginReq_Handle(Session session, C_LoginReq packet)
+        public void C_LoginReq_Handle(Session session, C_LoginReq packet)
         {
-            AccountInfo accountInfo = await _server.TryGetAccountInfo(packet.id, packet.passward.GetHashCode().ToString());
-            if (accountInfo.userId != -1 && session is ClientSession clientSession)
+            if (session is ClientSession clientSession)
             {
-                session.Send(new S_LoginRes(true,accountInfo.nickName, accountInfo.userId).Write());
-            }
-            else
-            {
-                session.Send(new S_LoginRes(false, "invalidNickName", -1).Write());
+                _server.TryLogin(packet.id, packet.passward.GetHashCode().ToString(), clientSession);
             }
         }
 
