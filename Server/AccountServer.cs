@@ -1,8 +1,10 @@
-﻿using Shared.Contents;
+﻿using Server.GameServer;
+using Shared.Contents;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,6 +22,11 @@ namespace Server
             string host = Dns.GetHostName();
             IPHostEntry ipHost = Dns.GetHostEntry(host);
             IPAddress ipAddr = ipHost.AddressList[0];
+            if (ipAddr == null) {
+                Console.WriteLine($"{nameof(AccountServer)} : ip를 찾을 수 없음");
+                throw new Exception("ip를 찾을 수 없음");
+            }
+            Console.WriteLine($"server ipAddr = {ipAddr}");
             IPEndPoint endPoint = new IPEndPoint(ipAddr, 7777);
 
 
@@ -76,9 +83,10 @@ VALUES(@id,@password,@nickname);",
         }
 
         //반환 : uid, -1이라면 로그인 실패
-        public async Task<int> TryGetUID(string loginId, string passwordHash)
+        public async Task<AccountInfo> TryGetAccountInfo(string loginId, string passwordHash)
         {
             int userId = -1;
+            string nickName = "invalidNickName";
 
             await _db.RunSql(
                 @"BEGIN TRAN;
@@ -98,12 +106,13 @@ COMMIT;",
                     if (passwordHash == (string)reader["loginPasswordHash"])
                     {
                         userId = (int)reader["userId"];
+                        nickName = (string)reader["nickName"];
                     }
                 },
                 new() { { "@ID", loginId } }
                 );
 
-            return userId;
+            return new AccountInfo(userId, nickName);
         }
 
         private async void OnAcceptAsync(ClientSession session)

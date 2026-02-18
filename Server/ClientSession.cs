@@ -7,7 +7,7 @@ using Shared.Contents;
 
 namespace Server
 {
-    class ClientSession : PacketSession
+    public class ClientSession : PacketSession
     {
         private IPacketHandler _packetHandlerAsync;
         
