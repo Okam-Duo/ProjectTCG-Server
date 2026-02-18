@@ -14,15 +14,14 @@ namespace Server
 {
     public class AccountServer
     {
+        public event Action<AccountInfo, ClientSession>? OnUserLogin;
+
         private Listener<ClientSession> _listener;
         private AccountServerPacketHandler _packetHandler;
         private DBConnection _db;
-        private Action<AccountInfo, ClientSession> _onUserLogin;
 
-        public AccountServer(Action<AccountInfo, ClientSession> onUserLogin)
+        public AccountServer()
         {
-            _onUserLogin = onUserLogin;
-
             //DNS (Domain Name System)
             string host = Dns.GetHostName();
             Console.WriteLine($"Dns host name : {host}");
@@ -129,7 +128,7 @@ COMMIT;",
             {
                 session.Send(new S_LoginRes(true, accountInfo.nickName, accountInfo.userId).Write());
 
-                _onUserLogin?.Invoke(accountInfo, session);
+                OnUserLogin?.Invoke(accountInfo, session);
                 return true;
             }
             else

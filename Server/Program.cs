@@ -27,7 +27,10 @@ namespace Server
             Shared.Logger.OnAddLogData += Console.WriteLine;
 
             gameServer = new GameServer.GameServer();
-            accountServer = new AccountServer((accountInfo, session) => { gameServer.TryAddUserSession(accountInfo, session); });
+            accountServer = new AccountServer();
+
+            gameServer.OnLogout += (session) => { session.ChangePacketHandler(new AccountServerPacketHandler(accountServer)); };
+            accountServer.OnUserLogin += (accountInfo, session) => { gameServer.TryAddUserSession(accountInfo, session); };
 
             while (true)
             {

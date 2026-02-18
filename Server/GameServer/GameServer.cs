@@ -9,12 +9,13 @@ namespace Server.GameServer
 {
     public class GameServer
     {
+        public event Action<ClientSession>? OnLogout;
+
         private Dictionary<int, User> _users = new();
         private object _lock = new();
 
         public GameServer()
         {
-
         }
 
         public bool TryAddUserSession(AccountInfo accountInfo, ClientSession session)
@@ -58,7 +59,8 @@ namespace Server.GameServer
             if (isContained)
             {
                 Console.WriteLine($"유저 로그아웃 : {user.accountInfo.nickName}");
-                return user.TryCloseSession();
+                OnLogout?.Invoke(user.Logout());
+                return true;
             }
             else
             {

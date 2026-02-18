@@ -46,7 +46,7 @@ namespace Server
 
             Console.WriteLine($"[From Client] packetId : {packetId}");
 
-            _packetHandlerAsync.RunPakcetHandle(this, packetId, packet);
+            _packetHandlerAsync?.RunPakcetHandle(this, packetId, packet);
         }
 
         public override void OnSend(int numOfByte)

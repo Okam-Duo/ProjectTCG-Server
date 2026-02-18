@@ -15,12 +15,14 @@ namespace Server
         private readonly ClientSession _session;
         private object _lock = new object();
         private bool _isClosed = false;
+        private GameServer.GameServer _server;
 
         public User(ClientSession session, AccountInfo accountInfo, GameServer.GameServer server)
         {
             this.accountInfo = accountInfo;
             _session = session;
             _session.ChangePacketHandler(new UserPacketHandler(this, server));
+            _server = server;
         }
 
         public void SendPacket(ArraySegment<byte> data)
@@ -30,12 +32,27 @@ namespace Server
 
         public bool TryCloseSession()
         {
-            lock (_lock) {
+            lock (_lock)
+            {
                 if (_isClosed) return false;
                 _session.Disconnect();
                 _isClosed = true;
             }
             return true;
+        }
+
+        public ClientSession Logout()
+        {
+            lock (_lock)
+            {
+                if (_isClosed) return _session;
+                _isClosed = true;
+            }
+            _session.ChangePacketHandler(null);
+            _server.TryRemoveUserSession(this);
+
+
+            return _session;
         }
     }
 }
