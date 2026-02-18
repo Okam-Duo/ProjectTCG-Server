@@ -23,11 +23,16 @@ namespace Server
             Console.WriteLine($"Server->Client 패킷이 수신되었습니다, 패킷 타입 : {packet.GetType().Name}");
         }
 
+        private void OnRecieveUnhandledPacket(Session session, IPacket packet)
+        {
+            Console.WriteLine($"{nameof(AccountServerPacketHandler)}에서 관리되지 않는 패킷이 수신되었습니다, 패킷 타입 : {packet.GetType().Name}");
+        }
+
         #region 패킷 핸들
 
         public void C_BuyShopItemReq_Handle(Session session, C_BuyShopItemReq packet)
         {
-            throw new NotImplementedException();
+            OnRecieveUnhandledPacket(session, packet);
         }
 
         public async void C_CheckIdAvailableReq_Handle(Session session, C_CheckIdAvailableReq packet)
@@ -44,17 +49,17 @@ namespace Server
 
         public void C_CurrencyInfoReq_Handle(Session session, C_CurrencyInfoReq packet)
         {
-            throw new NotImplementedException();
+            OnRecieveUnhandledPacket(session, packet);
         }
 
         public void C_DeckEditReq_Handle(Session session, C_DeckEditReq packet)
         {
-            throw new NotImplementedException();
+            OnRecieveUnhandledPacket(session, packet);
         }
 
         public void C_DeckInfoReq_Handle(Session session, C_DeckInfoReq packet)
         {
-            throw new NotImplementedException();
+            OnRecieveUnhandledPacket(session, packet);
         }
 
         public void C_LoginReq_Handle(Session session, C_LoginReq packet)
@@ -67,12 +72,12 @@ namespace Server
 
         public void C_LogoutReq_Handle(Session session, C_LogoutReq packet)
         {
-            throw new NotImplementedException();
+            OnRecieveUnhandledPacket(session, packet);
         }
 
         public void C_ShopInfoReq_Handle(Session session, C_ShopInfoReq packet)
         {
-            throw new NotImplementedException();
+            OnRecieveUnhandledPacket(session, packet);
         }
 
         public async void C_SignInReq_Handle(Session session, C_SignInReq packet)
@@ -83,22 +88,22 @@ namespace Server
 
         public void C_SurrenderReq_Handle(Session session, C_SurrenderReq packet)
         {
-            throw new NotImplementedException();
+            OnRecieveUnhandledPacket(session, packet);
         }
 
         public void C_TryMatchingReq_Handle(Session session, C_TryMatchingReq packet)
         {
-            throw new NotImplementedException();
+            OnRecieveUnhandledPacket(session, packet);
         }
 
         public void C_TurnEndReq_Handle(Session session, C_TurnEndReq packet)
         {
-            throw new NotImplementedException();
+            OnRecieveUnhandledPacket(session, packet);
         }
 
         public void C_UseCardReq_Handle(Session session, C_UseCardReq packet)
         {
-            throw new NotImplementedException();
+            OnRecieveUnhandledPacket(session, packet);
         }
 
         public void S_BuyShopItemRes_Handle(Session session, S_BuyShopItemRes packet)
