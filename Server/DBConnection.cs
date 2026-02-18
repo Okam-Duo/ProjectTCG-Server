@@ -28,7 +28,7 @@ namespace Server
         {
             try
             {
-                using (SqlConnection _connection = new SqlConnection(DefaultConnectionString))
+                using (SqlConnection _connection = new SqlConnection(_connectionString))
                 {
                     await _connection.OpenAsync();
 
