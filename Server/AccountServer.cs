@@ -25,7 +25,7 @@ namespace Server
 
             //DNS (Domain Name System)
             string host = Dns.GetHostName();
-            Console.WriteLine(host);
+            Console.WriteLine($"Dns host name : {host}");
             IPHostEntry ipHost = Dns.GetHostEntry(host);
             IPAddress ipAddr = ipHost.AddressList[0];
             if (ipAddr == null)
@@ -127,6 +127,8 @@ COMMIT;",
             AccountInfo accountInfo = await TryGetAccountInfo(loginId, loginPasswordHash);
             if (accountInfo.userId != -1)
             {
+                session.Send(new S_LoginRes(true, accountInfo.nickName, accountInfo.userId).Write());
+
                 _onUserLogin?.Invoke(accountInfo, session);
                 return true;
             }
