@@ -38,7 +38,8 @@ namespace Server
 
         public void C_ConnectServerReq_Handle(Session session, C_ConnectServerReq packet)
         {
-            Console.WriteLine("테스트 성공");
+            Console.WriteLine($"{nameof(C_ConnectServerReq)} 수신");
+            session.Send(new S_ConnectServerRes().Write());
         }
 
         public void C_CurrencyInfoReq_Handle(Session session, C_CurrencyInfoReq packet)
