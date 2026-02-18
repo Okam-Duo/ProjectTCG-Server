@@ -20,6 +20,7 @@ namespace Server
         {
             //DNS (Domain Name System)
             string host = Dns.GetHostName();
+            Console.WriteLine(host);
             IPHostEntry ipHost = Dns.GetHostEntry(host);
             IPAddress ipAddr = ipHost.AddressList[0];
             if (ipAddr == null) {
