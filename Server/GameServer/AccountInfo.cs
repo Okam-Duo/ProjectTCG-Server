@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Server.GameServer
 {
-    public struct AccountInfo
+    public readonly struct AccountInfo
     {
         public readonly int userId;
         public readonly string nickName;
