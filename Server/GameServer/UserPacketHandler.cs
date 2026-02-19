@@ -50,7 +50,13 @@ namespace Server.GameServer
 
         public void C_CurrencyInfoReq_Handle(Session session, C_CurrencyInfoReq packet)
         {
-            OnRecieveUnhandledPacket(session, packet);
+            async Task Logic()
+            {
+                int gold = await _user.GetGold();
+                session.Send(new S_CurrencyInfoRes(gold).Write());
+            }
+
+            Task t = Logic();
         }
 
         public void C_DeckEditReq_Handle(Session session, C_DeckEditReq packet)

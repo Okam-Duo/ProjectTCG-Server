@@ -10,12 +10,15 @@ namespace Server.GameServer
     public class GameServer
     {
         public event Action<ClientSession>? OnLogout;
+        
+        public DBConnection db;
 
         private Dictionary<int, User> _users = new();
         private object _lock = new();
 
         public GameServer()
         {
+            db = new DBConnection();
         }
 
         public bool TryAddUserSession(AccountInfo accountInfo, ClientSession session)

@@ -12,10 +12,12 @@ namespace Server
     public class User
     {
         public readonly AccountInfo accountInfo;
+
         private readonly ClientSession _session;
+        private GameServer.GameServer _server;
+        private DBConnection _db;
         private object _lock = new object();
         private bool _isClosed = false;
-        private GameServer.GameServer _server;
 
         public User(ClientSession session, AccountInfo accountInfo, GameServer.GameServer server)
         {
@@ -23,6 +25,7 @@ namespace Server
             _session = session;
             _session.ChangePacketHandler(new UserPacketHandler(this, server));
             _server = server;
+            _db = server.db;
         }
 
         public void SendPacket(ArraySegment<byte> data)
@@ -53,6 +56,32 @@ namespace Server
 
 
             return _session;
+        }
+
+        public async Task<int> GetGold()
+        {
+            bool canRead = false;
+            int gold = -1;
+
+            await _db.RunSql("SELECT * FROM UserInventory WHERE userId = @id AND resourceId = 1;",
+                (reader) =>
+                {
+                    canRead = reader.Read();
+
+                    if (canRead)
+                    {
+                        gold = (int)reader["resourceCount"];
+                    }
+                },
+                new() { { "@id", accountInfo.userId } });
+            if (canRead)
+            {
+                return gold;
+            }
+            else
+            {
+                return 0;
+            }
         }
     }
 }
