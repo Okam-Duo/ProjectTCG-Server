@@ -24,7 +24,7 @@ namespace Server
         }
 
 
-        public async Task<(bool,Exception?)> RunSql(string sql, Action<SqlDataReader> callBack = null, Dictionary<string, string> sqlParameters = null)
+        public async Task<(bool,Exception?)> RunSql(string sql, Action<SqlDataReader> callBack = null, Dictionary<string, object> sqlParameters = null)
         {
             try
             {
@@ -38,7 +38,7 @@ namespace Server
                         {
                             foreach (var param in sqlParameters)
                             {
-                                command.Parameters.AddWithValue(param.Key, param.Value);
+                                command.Parameters.AddWithValue(param.Key, param.Value.ToString());
                             }
                         }
 
@@ -53,7 +53,7 @@ namespace Server
             }
             catch (Exception ex)
             {
-                //Console.WriteLine($"{nameof(DBConnection)}.{nameof(RunSql)} exception : {ex}");
+                Console.WriteLine($"{nameof(DBConnection)}.{nameof(RunSql)} exception : {ex}");
 
                 return (false, ex);
             }
