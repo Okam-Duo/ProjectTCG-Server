@@ -26,14 +26,15 @@ namespace Server
             string host = Dns.GetHostName();
             Console.WriteLine($"Dns host name : {host}");
             IPHostEntry ipHost = Dns.GetHostEntry(host);
-            IPAddress ipAddr = ipHost.AddressList[0];
+            IPAddress ipAddr = ipHost.AddressList
+    .FirstOrDefault(a => a.AddressFamily == AddressFamily.InterNetwork);
             if (ipAddr == null)
             {
                 Console.WriteLine($"{nameof(AccountServer)} : ip를 찾을 수 없음");
                 throw new Exception("ip를 찾을 수 없음");
             }
             Console.WriteLine($"server ipAddr = {ipAddr}");
-            IPEndPoint endPoint = new IPEndPoint(ipAddr, 7777);
+            IPEndPoint endPoint = new IPEndPoint(IPAddress.Any, 7777);
 
 
             _packetHandler = new AccountServerPacketHandler(this);
