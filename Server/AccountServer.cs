@@ -26,8 +26,7 @@ namespace Server
             string host = Dns.GetHostName();
             Console.WriteLine($"Dns host name : {host}");
             IPHostEntry ipHost = Dns.GetHostEntry(host);
-            IPAddress ipAddr = ipHost.AddressList
-    .FirstOrDefault(a => a.AddressFamily == AddressFamily.InterNetwork);
+            IPAddress? ipAddr = ipHost.AddressList.FirstOrDefault(a => a.AddressFamily == AddressFamily.InterNetwork);
             if (ipAddr == null)
             {
                 Console.WriteLine($"{nameof(AccountServer)} : ip를 찾을 수 없음");
