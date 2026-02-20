@@ -7,19 +7,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Server
+namespace Server.GameServer
 {
     public class User
     {
         public readonly AccountInfo accountInfo;
 
         private readonly ClientSession _session;
-        private GameServer.GameServer _server;
+        private GameServer _server;
         private DBConnection _db;
         private object _lock = new object();
         private bool _isClosed = false;
 
-        public User(ClientSession session, AccountInfo accountInfo, GameServer.GameServer server)
+        public User(ClientSession session, AccountInfo accountInfo, GameServer server)
         {
             this.accountInfo = accountInfo;
             _session = session;
