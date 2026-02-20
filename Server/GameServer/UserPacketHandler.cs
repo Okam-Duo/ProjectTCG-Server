@@ -66,7 +66,21 @@ namespace Server.GameServer
 
         public void C_DeckInfoReq_Handle(Session session, C_DeckInfoReq packet)
         {
-            OnRecieveUnhandledPacket(session, packet);
+            async Task Logic()
+            {
+                Deck? deck = await _user.GetDeck(packet.deckIndex);
+
+                if (deck != null)
+                {
+                    session.Send(new S_DeckInfoRes(deck.Value.heroIds, deck.Value.cardIds).Write());
+                }
+                else
+                {
+                    session.Send(new S_DeckInfoRes(Array.Empty<int>(), Array.Empty<int>()).Write());
+                }
+            }
+
+            Task t = Logic();
         }
 
         public void C_LoginReq_Handle(Session session, C_LoginReq packet)

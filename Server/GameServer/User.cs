@@ -83,5 +83,39 @@ namespace Server.GameServer
                 return 0;
             }
         }
+
+        public async Task<Deck?> GetDeck(int index)
+        {
+            bool isSuccess = true;
+
+
+            List<int> cardIds = new List<int>();
+            (isSuccess, _) = await _db.RunSql("SELECT * FROM DeckCards WHERE deckId = (SELECT deckId FROM UserDecks WHERE userId = @id AND deckIndex = @index);",
+                (reader) =>
+                {
+                    while (reader.Read())
+                    {
+                        cardIds.Add((int)reader["cardId"]);
+                    }
+                },
+                new() { { "@id", accountInfo.userId }, { "@index", index } });
+            if (!isSuccess) return null;
+
+
+            List<int> heroIds = new List<int>();
+            (isSuccess, _) = await _db.RunSql("SELECT * FROM DeckHeroes WHERE deckId = (SELECT deckId FROM UserDecks WHERE userId = @id AND deckIndex = @index);",
+                (reader) =>
+                {
+                    while (reader.Read())
+                    {
+                        heroIds.Add((int)reader["heroId"]);
+                    }
+                },
+                new() { { "@id", accountInfo.userId }, { "@index", index } });
+            if (!isSuccess) return null;
+
+
+            return new Deck(heroIds.ToArray(), cardIds.ToArray());
+        }
     }
 }
