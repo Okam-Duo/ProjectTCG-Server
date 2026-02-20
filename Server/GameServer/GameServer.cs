@@ -24,12 +24,15 @@ namespace Server.GameServer
         public bool TryAddUserSession(AccountInfo accountInfo, ClientSession session)
         {
             bool isContained;
+            User user = null;
+
             lock (_lock)
             {
                 isContained = FindUser(accountInfo.userId) != null;
                 if (!isContained)//이미 로그인 되있는 계정이 아니라면
                 {
-                    _users.Add(accountInfo.userId, new User(session, accountInfo, this));//로그인된 계정 목록에 추가
+                    user = new User(session, accountInfo, this);
+                    _users.Add(accountInfo.userId, user);//로그인된 계정 목록에 추가
                 }
             }
 
@@ -41,7 +44,7 @@ namespace Server.GameServer
             else
             {
                 session.Send(new S_LoginRes(true, accountInfo.nickName, accountInfo.userId).Write());
-                Console.WriteLine($"유저 로그인 : {accountInfo.nickName}");
+                OnAddUser(user);
 
                 return true;
             }
@@ -75,6 +78,11 @@ namespace Server.GameServer
         {
             _users.TryGetValue(userId, out User? user);
             return user;
+        }
+
+        private void OnAddUser(User user)
+        {
+            Console.WriteLine($"유저 로그인 : {user.accountInfo.nickName}");
         }
     }
 }
