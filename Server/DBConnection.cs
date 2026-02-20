@@ -24,7 +24,7 @@ namespace Server
         }
 
 
-        public async Task<(bool,Exception?)> RunSql(string sql, Action<SqlDataReader> callBack = null, Dictionary<string, object> sqlParameters = null)
+        public async Task<(bool,Exception?)> RunSql(string sql, Action<SqlDataReader>? callBack = null, Dictionary<string, object>? sqlParameters = null)
         {
             try
             {
