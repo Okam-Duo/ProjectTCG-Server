@@ -9,7 +9,7 @@ using Microsoft.Diagnostics.Utilities;
 
 namespace Server
 {
-    public class DBConnection
+    public record DBConnection
     {
         private const string DefaultConnectionString = "Server=KJW\\SQLEXPRESS;Database=TCGGameDB;User Id=TCGGameSERVER;Password=123456789123456789;TrustServerCertificate=True";
 
