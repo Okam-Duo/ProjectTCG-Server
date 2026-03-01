@@ -117,5 +117,41 @@ namespace Server.GameServer
 
             return new Deck(heroIds, cardIds);
         }
+
+        public async Task<bool> SetDeck(int index, Deck deck)
+        {
+            const string sqlFormat =
+@"BEGIN TRAN;
+
+DECLARE @deckId AS INT;
+SET @deckId = (SELECT deckId FROM UserDecks WHERE userId = @userId AND deckIndex = @deckIndex);
+DELETE FROM DeckCards WHERE deckId = @deckId;
+DELETE FROM DeckHeroes WHERE deckId = @deckId;
+
+{0}
+
+COMMIT;";
+
+            const string cardSqlFormat = "INSERT INTO DeckCards(deckId,cardId,cardCount) VALUES(@deckId,{0},{1});\n";
+            const string heroSqlFormat = "INSERT INTO HeroCards(deckId,heroId,heroCount) VALUES(@deckId,{0},1);\n";
+
+            string insertSql = "";
+
+            foreach (var cardId in deck.cardIds.GetItemCounts())
+            {
+                insertSql += string.Format(cardSqlFormat, cardId.value, cardId.count);
+            }
+
+            foreach (var heroId in deck.heroIds)
+            {
+                insertSql += string.Format(heroSqlFormat, heroId);
+            }
+
+            string sql = string.Format(sqlFormat, insertSql);
+
+            (bool isSuccess, _) = await _db.RunSql(sql, callBack: null, new() { { "@userId", accountInfo.userId }, { "@deckIndex", index } });
+
+            return isSuccess;
+        }
     }
 }

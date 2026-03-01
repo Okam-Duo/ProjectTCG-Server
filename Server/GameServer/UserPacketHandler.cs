@@ -61,7 +61,16 @@ namespace Server.GameServer
 
         public void C_DeckEditReq_Handle(Session session, C_DeckEditReq packet)
         {
-            OnRecieveUnhandledPacket(session, packet);
+            async Task Logic()
+            {
+                Deck deck = new(packet.heroesId, new(packet.cardsId));
+                bool isSuccess = await _user.SetDeck(packet.deckIndex, deck);
+
+                S_DeckEditRes response = new(packet.deckIndex, isSuccess);
+                session.Send(response.Write());
+            }
+
+            Task t = Logic();
         }
 
         public void C_DeckInfoReq_Handle(Session session, C_DeckInfoReq packet)
