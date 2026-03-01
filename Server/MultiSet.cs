@@ -69,7 +69,7 @@ namespace Server
         /// <summary>
         /// 각 원소의 개수들을 순회하며 가져오기
         /// </summary>
-        public IEnumerable<(T, int)> GetItemCounts()
+        public IEnumerable<(T value, int count)> GetItemCounts()
         {
             foreach (var pair in _dictionary)
             {
