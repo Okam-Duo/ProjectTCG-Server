@@ -72,7 +72,7 @@ namespace Server.GameServer
 
                 if (deck != null)
                 {
-                    session.Send(new S_DeckInfoRes(deck.Value.heroIds, deck.Value.cardIds).Write());
+                    session.Send(new S_DeckInfoRes(deck.Value.heroIds.ToArray(), deck.Value.cardIds.ToArray()).Write());
                 }
                 else
                 {

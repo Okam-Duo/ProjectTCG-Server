@@ -115,7 +115,7 @@ namespace Server.GameServer
             if (!isSuccess) return null;
 
 
-            return new Deck(heroIds.ToArray(), cardIds.ToArray());
+            return new Deck(heroIds, cardIds);
         }
     }
 }
