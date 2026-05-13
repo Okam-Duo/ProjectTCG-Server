@@ -8,9 +8,12 @@ namespace Server
 {
     public static class Logger
     {
-        public static void Log(string massage)
+        public static void Log(string massage, string loggerRepo = "Server")
         {
-            Console.WriteLine(massage);
+            var nowTime = DateTime.Now;
+            string text = $"[{nowTime}][{loggerRepo}] {massage}";
+
+            Console.WriteLine(text);
         }
     }
 }
