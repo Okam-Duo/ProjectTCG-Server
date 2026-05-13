@@ -17,6 +17,12 @@ namespace Server
 
         static void Main(string[] args)
         {
+#if DEBUG
+            Console.WriteLine("Debug");
+#else
+            Console.WriteLine("Release");
+#endif
+
             StartServer();
         }
 
