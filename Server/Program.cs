@@ -12,8 +12,8 @@ namespace Server
 
     class Program
     {
-        private static AccountServer accountServer;
-        private static GameServer.GameServer gameServer;
+        private static AccountServer? accountServer;
+        private static GameServer.GameServer? gameServer;
 
         static void Main(string[] args)
         {
