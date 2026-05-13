@@ -64,7 +64,7 @@ namespace Server.GameServer
 
             if (isContained)
             {
-                Console.WriteLine($"유저 로그아웃 : {user.accountInfo.nickName}");
+                Logger.Log($"유저 로그아웃 : {user.accountInfo.nickName}");
                 OnLogout?.Invoke(user.Logout());
                 return true;
             }
@@ -82,7 +82,7 @@ namespace Server.GameServer
 
         private void OnAddUser(User user)
         {
-            Console.WriteLine($"유저 로그인 : {user.accountInfo.nickName}");
+            Logger.Log($"유저 로그인 : {user.accountInfo.nickName}");
         }
     }
 }

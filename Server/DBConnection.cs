@@ -53,7 +53,7 @@ namespace Server
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"{nameof(DBConnection)}.{nameof(RunSql)} exception : {ex}");
+                Logger.Log($"{nameof(DBConnection)}.{nameof(RunSql)} exception : {ex}");
 
                 return (false, ex);
             }

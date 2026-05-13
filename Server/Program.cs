@@ -24,7 +24,7 @@ namespace Server
         {
             Console.WriteLine("ProjectTCG-Server Program\n\n============\n\n");
 
-            Shared.Logger.OnAddLogData += Console.WriteLine;
+            Shared.Logger.OnAddLogData += Logger.Log;
 
             gameServer = new GameServer.GameServer();
             accountServer = new AccountServer();

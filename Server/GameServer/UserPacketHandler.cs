@@ -22,12 +22,12 @@ namespace Server.GameServer
 
         private void OnRecieveServerToClientPacket(Session session, IPacket packet)
         {
-            Console.WriteLine($"Server->Client 패킷이 수신되었습니다, 패킷 타입 : {packet.GetType().Name}");
+            Logger.Log($"Server->Client 패킷이 수신되었습니다, 패킷 타입 : {packet.GetType().Name}");
         }
 
         private void OnRecieveUnhandledPacket(Session session, IPacket packet)
         {
-            Console.WriteLine($"{nameof(UserPacketHandler)}에서 관리되지 않는 패킷이 수신되었습니다, 패킷 타입 : {packet.GetType().Name}");
+            Logger.Log($"{nameof(UserPacketHandler)}에서 관리되지 않는 패킷이 수신되었습니다, 패킷 타입 : {packet.GetType().Name}");
         }
 
         #region 패킷 핸들
@@ -44,7 +44,7 @@ namespace Server.GameServer
 
         public void C_ConnectServerReq_Handle(Session session, C_ConnectServerReq packet)
         {
-            Console.WriteLine($"{nameof(C_ConnectServerReq)} 수신");
+            Logger.Log($"{nameof(C_ConnectServerReq)} 수신");
             session.Send(new S_ConnectServerRes().Write());
         }
 

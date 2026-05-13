@@ -24,15 +24,15 @@ namespace Server
         {
             //DNS (Domain Name System)
             string host = Dns.GetHostName();
-            Console.WriteLine($"Dns host name : {host}");
+            Logger.Log($"Dns host name : {host}");
             IPHostEntry ipHost = Dns.GetHostEntry(host);
             IPAddress? ipAddr = ipHost.AddressList.FirstOrDefault(a => a.AddressFamily == AddressFamily.InterNetwork);
             if (ipAddr == null)
             {
-                Console.WriteLine($"{nameof(AccountServer)} : ip를 찾을 수 없음");
+                Logger.Log($"{nameof(AccountServer)} : ip를 찾을 수 없음");
                 throw new Exception("ip를 찾을 수 없음");
             }
-            Console.WriteLine($"server ipAddr = {ipAddr}");
+            Logger.Log($"server ipAddr = {ipAddr}");
             IPEndPoint endPoint = new IPEndPoint(IPAddress.Any, 7777);
 
 
@@ -47,7 +47,7 @@ namespace Server
 
             _listener.StartListen();
 
-            Console.WriteLine($"{nameof(AccountServer)} is constructed!");
+            Logger.Log($"{nameof(AccountServer)} is constructed!");
         }
 
         public async Task<bool> CheckIdAvailable(string loginId)

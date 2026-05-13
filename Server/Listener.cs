@@ -68,7 +68,7 @@ namespace Server
             }
             else
             {
-                Console.WriteLine(args.SocketError.ToString());
+                Logger.Log(args.SocketError.ToString());
             }
 
             RegisterAccept(args);

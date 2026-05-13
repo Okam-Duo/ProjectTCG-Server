@@ -23,12 +23,12 @@ namespace Server
 
         public override void OnConnected(EndPoint endPoint)
         {
-            Console.WriteLine($"OnConnected : {endPoint}");
+            Logger.Log($"OnConnected : {endPoint}");
         }
 
         public override void OnDisconnected(EndPoint endPoint)
         {
-            Console.WriteLine($"OnDisconnected : {endPoint}");
+            Logger.Log($"OnDisconnected : {endPoint}");
         }
 
         public override void OnRecvPacket(ArraySegment<byte> buffer)
@@ -44,14 +44,14 @@ namespace Server
             ArraySegment<byte> packetData = new ArraySegment<byte>(buffer.Array, buffer.Offset + c, packetSize - c);
             IPacket packet = PacketFactory.GeneratePacket(packetId, packetData);
 
-            Console.WriteLine($"[From Client] packetId : {packetId}");
+            Logger.Log($"[From Client] packetId : {packetId}");
 
             _packetHandlerAsync?.RunPakcetHandle(this, packetId, packet);
         }
 
         public override void OnSend(int numOfByte)
         {
-            Console.WriteLine($"Transferred byte : {numOfByte}");
+            Logger.Log($"Transferred byte : {numOfByte}");
         }
     }
 }
